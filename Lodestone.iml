@@ -19,11 +19,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Spigot/spigot-1.16.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Server/spigot-1.16.4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$MODULE_DIR$/../Spigot/spigot-1.16.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../Server/spigot-1.16.4.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

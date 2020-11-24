@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="" />
+    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lodestone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Lodestone.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,7 +30,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Spigot/spigot-1.16.3.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Server/spigot-1.16.4.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -46,19 +50,19 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2586" y="261" key="FileChooserDialogImpl" timestamp="1600019242716">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="666" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593370393498" />
-    <state x="2586" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1600019242716" />
-    <state x="2360" y="94" key="SettingsEditor" timestamp="1600019255747">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state x="440" y="94" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593371631991" />
-    <state x="2360" y="94" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1600019255747" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1593374001688">
+    <state x="666" y="261" key="FileChooserDialogImpl" timestamp="1606225826618">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1593374001688" />
+    <state x="666" y="261" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1606225826618" />
+    <state x="2586" y="261" key="FileChooserDialogImpl/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1600019242716" />
+    <state x="440" y="94" key="SettingsEditor" timestamp="1606225830241">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1606225830241" />
+    <state x="2360" y="94" key="SettingsEditor/1920.0.1920.1040/0.0.1920.1040@1920.0.1920.1040" timestamp="1600019255747" />
+    <state x="927" y="67" width="585" height="888" key="find.popup" timestamp="1606225803265">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="927" y="67" width="585" height="888" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606225803265" />
   </component>
 </project>

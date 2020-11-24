@@ -1,9 +1,8 @@
 package me.Percyqaz.Lodestone;
 
-import net.minecraft.server.v1_16_R2.NBTTagCompound;
+import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import org.bukkit.*;
-import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,7 +19,7 @@ public class CompassListener implements Listener {
         Player p = e.getPlayer();
         ItemStack i = p.getInventory().getItemInMainHand();
         if (e.getHand() == EquipmentSlot.HAND && i.getType() == Material.COMPASS && e.getAction() == Action.RIGHT_CLICK_AIR) {
-            net.minecraft.server.v1_16_R2.ItemStack item = CraftItemStack.asNMSCopy(i);
+            net.minecraft.server.v1_16_R3.ItemStack item = CraftItemStack.asNMSCopy(i);
             NBTTagCompound tag = item.getOrCreateTag();
             if (tag.hasKey("LodestonePos")) {
                 p.sendMessage(ChatColor.BLUE + "Whoosh!");
