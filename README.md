@@ -18,4 +18,4 @@ PLEASE SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that i
 
 I hope this repository is useful to someone who is looking for a plugin like this - When I googled around (at time of creation) I couldn't find anything.
 
-You can get the .jar file [here](https://github.com/percyqaz/LodestoneTeleport/releases/) - For 1.16.2 and 1.16.3
+You can get the .jar file [here](https://github.com/percyqaz/LodestoneTeleport/releases/) - For 1.16.2 - 1.16.4
