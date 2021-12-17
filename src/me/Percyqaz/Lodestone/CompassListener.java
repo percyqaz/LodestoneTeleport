@@ -20,7 +20,8 @@ public class CompassListener implements Listener {
         if (e.getHand() == EquipmentSlot.HAND && item.getType() == Material.COMPASS && e.getAction() == Action.RIGHT_CLICK_AIR) {
             CompassMeta itemMeta = (CompassMeta)item.getItemMeta();
             if (itemMeta.hasLodestone() && itemMeta.isLodestoneTracked()) {
-                p.sendMessage(ChatColor.BLUE + "Whoosh!");
+                String teleportMessage = itemMeta.hasDisplayName() ? " Teleported to " + ChatColor.GREEN + itemMeta.getDisplayName() : "";
+                p.sendMessage(ChatColor.BLUE + "Whoosh!" + teleportMessage);
                 Location pos = itemMeta.getLodestone();
                 p.teleport(pos.add(0.5, 1.5, 0.5));
                 item.setAmount(item.getAmount() - 1);
