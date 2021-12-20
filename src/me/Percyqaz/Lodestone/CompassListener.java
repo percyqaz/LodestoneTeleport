@@ -61,9 +61,10 @@ public class CompassListener implements Listener
     void PerformTeleport(Player player, Location oldLoc)
     {
         // Need to check player hasn't moved, is still holding a teleport compass
-        if (player.getLocation().distanceSquared(oldLoc) > 0 && !player.isDead())
+        if (player.getLocation().distance(oldLoc) > 0.1 || player.isDead())
         {
             player.sendMessage(config.getString("teleportFailedMovedBeforeTeleport"));
+            player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
             resetPlayerCooldown(player.getName());
             return;
         }
@@ -79,18 +80,20 @@ public class CompassListener implements Listener
                                 ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
                                 : config.getString("teleportSucceeded");
                 player.sendMessage(teleportMessage);
-                player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50);
+                player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
                 Location pos = itemMeta.getLodestone();
                 player.teleport(pos.add(0.5, 1.5, 0.5));
                 item.setAmount(item.getAmount() - 1);
 
-                player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50);
+                player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+                player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.5f);
                 return;
             }
         }
 
         player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
+        player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
         resetPlayerCooldown(player.getName());
     }
 
@@ -117,7 +120,8 @@ public class CompassListener implements Listener
                     () -> PerformTeleport(player, oldLoc),
                     warmupTimeTicks
             );
-            player.spawnParticle(Particle.ENCHANTMENT_TABLE, oldLoc.add(0.0f, 1.0f, 0.0f), 50);
+            player.spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0.0f, 1.0f, 0.0f), 50);
+            player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 1.5f);
             return true;
         }
         return false;

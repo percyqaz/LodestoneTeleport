@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="added cooldown and warmup times">
+    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="added configurable cooldown and warmup times">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/Lodestone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/Lodestone.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +66,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626271207819</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added configurable cooldown and warmup times">
+      <created>1639964456629</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1639964456629</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,6 +91,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update to 1.17.1" />
     <MESSAGE value="added cooldown and warmup times" />
-    <option name="LAST_COMMIT_MESSAGE" value="added cooldown and warmup times" />
+    <MESSAGE value="added configurable cooldown and warmup times" />
+    <option name="LAST_COMMIT_MESSAGE" value="added configurable cooldown and warmup times" />
   </component>
 </project>
