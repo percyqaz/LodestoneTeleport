@@ -14,7 +14,7 @@ You must
 
 That is all. I wrote this with almost zero experience with Spigot plugins. Used for a private server.
 
-SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that does something very similar. 
+SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that does something very similar (not made by me!). 
 
 I hope this repository is useful to someone who is looking for a plugin like this - When I googled around (at time of creation) I couldn't find anything.
 
