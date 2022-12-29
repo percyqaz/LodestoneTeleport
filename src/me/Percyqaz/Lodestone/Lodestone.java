@@ -16,6 +16,7 @@ public class Lodestone extends JavaPlugin {
         config.addDefault("teleportFailedCompassNotInHand", "§4Teleport cancelled because the compass is no longer in your hand!");
         config.addDefault("teleportSucceeded", "§9Whoosh!");
         config.addDefault("teleportSucceededNamedLocation", "§9Whoosh! Teleported to §a%location%");
+        config.addDefault("enableRecoveryCompass", true);
 
         config.options().copyDefaults(true);
         saveConfig();

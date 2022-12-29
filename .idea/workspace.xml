@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="added configurable cooldown and warmup times">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lodestone.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Lodestone.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/Lodestone.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/Lodestone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +31,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="8283d25n" />
+  </component>
   <component name="ProjectId" id="1dxXeuDQ3F8NQ9j6NqqcXM4KjRq" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -41,8 +47,8 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Minecraft-Server-Test/spigot-1.17.1.jar" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../SpigotBuildTools/spigot-api-1.19.1-R0.1-20220804.104059-10-shaded.jar" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
