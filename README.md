@@ -18,6 +18,7 @@ A Minecraft plugin for Spigot/PaperMC that listens for a right click with a comp
 - NEW: You can do the same with a recovery compass. If you have died, it will teleport you to where you last died
 - How you balance your server so that people actually have any recovery compasses to spend is up to you
 - Recovery compass teleports can be turned off in the config
+- NEW: Teleporting between dimensions can be turned off in the config
 
 <img alt="Preview gif" src="https://github.com/percyqaz/LodestoneTeleport/blob/master/demo.gif?raw=true" />
 
