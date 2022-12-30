@@ -22,6 +22,7 @@ public class CompassListener implements Listener
     long cooldownTimeMillis;
     long warmupTimeTicks;
     boolean enableRecoveryCompass;
+    boolean enableDimensionalTravel;
     Map<String, Long> cooldowns = new HashMap<>();
 
     public CompassListener(Lodestone plugin, FileConfiguration config)
@@ -33,19 +34,20 @@ public class CompassListener implements Listener
         warmupTimeTicks = (long)(config.getInt("warmupSeconds")) * 20L;
 
         enableRecoveryCompass = config.getBoolean("enableRecoveryCompass", true);
+        enableDimensionalTravel = config.getBoolean("enableDimensionalTravel", true);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
     }
 
-    void resetPlayerCooldown(String name)
+    void ResetPlayerCooldown(String name)
     {
         long now = System.currentTimeMillis();
         cooldowns.put(name, now - cooldownTimeMillis);
     }
 
     /// Returns 0 if no cooldown, else a positive number of seconds cooldown
-    int checkPlayerCooldown(String name)
+    int CheckPlayerCooldown(String name)
     {
         long now = System.currentTimeMillis();
         if (cooldowns.containsKey(name))
@@ -61,14 +63,26 @@ public class CompassListener implements Listener
         return 0;
     }
 
+    boolean CheckPlayerDimension(Player player, Location target)
+    {
+        if (enableDimensionalTravel) return true;
+
+        return player.getLocation().getWorld() == target.getWorld();
+    }
+
+    boolean PlayerHasMoved(Location before, Location after)
+    {
+        return before.getWorld() != after.getWorld() || before.distance(after) > 0.1;
+    }
+
     void PerformTeleport(Player player, Location oldLoc)
     {
         // Check player hasn't moved, is still holding a teleport compass
-        if (player.getLocation().distance(oldLoc) > 0.1 || player.isDead())
+        if (PlayerHasMoved(oldLoc, player.getLocation()) || player.isDead())
         {
             player.sendMessage(config.getString("teleportFailedMovedBeforeTeleport"));
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
-            resetPlayerCooldown(player.getName());
+            ResetPlayerCooldown(player.getName());
             return;
         }
 
@@ -97,17 +111,17 @@ public class CompassListener implements Listener
 
         player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
         player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
-        resetPlayerCooldown(player.getName());
+        ResetPlayerCooldown(player.getName());
     }
 
     void PerformRecoveryTeleport(Player player, Location oldLoc)
     {
         // Check player hasn't moved, is still holding a recovery compass
-        if (player.getLocation().distance(oldLoc) > 0.1 || player.isDead())
+        if (PlayerHasMoved(oldLoc, player.getLocation()) || player.isDead())
         {
             player.sendMessage(config.getString("teleportFailedMovedBeforeTeleport"));
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
-            resetPlayerCooldown(player.getName());
+            ResetPlayerCooldown(player.getName());
             return;
         }
 
@@ -130,11 +144,11 @@ public class CompassListener implements Listener
 
         player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
         player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
-        resetPlayerCooldown(player.getName());
+        ResetPlayerCooldown(player.getName());
     }
 
     /// Returns true if a teleport went through and false otherwise
-    Boolean handlePlayerClickCompass(Player player, ItemStack item)
+    Boolean HandlePlayerClickCompass(Player player, ItemStack item)
     {
         // Assert: Player's main hand is a compass, they have just right clicked air with it
         // Assert: Item passed in is the main-hand compass
@@ -142,7 +156,9 @@ public class CompassListener implements Listener
         CompassMeta itemMeta = (CompassMeta)item.getItemMeta();
         if (itemMeta.hasLodestone() && itemMeta.isLodestoneTracked())
         {
-            int cooldown = checkPlayerCooldown(player.getName());
+            if (!CheckPlayerDimension(player, itemMeta.getLodestone())) return false;
+
+            int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
                 player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
@@ -164,7 +180,7 @@ public class CompassListener implements Listener
     }
 
     /// Returns true if a teleport went through and false otherwise
-    Boolean handlePlayerClickRecoveryCompass(Player player, ItemStack item)
+    Boolean HandlePlayerClickRecoveryCompass(Player player)
     {
         // Assert: Player's main hand is a recovery compass, they have just right clicked air with it
         // Assert: Item passed in is the main-hand recovery compass
@@ -172,7 +188,9 @@ public class CompassListener implements Listener
         Location lastDeath = player.getLastDeathLocation();
         if (lastDeath != null)
         {
-            int cooldown = checkPlayerCooldown(player.getName());
+            if (!CheckPlayerDimension(player, lastDeath)) return false;
+
+            int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
                 player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
@@ -200,11 +218,11 @@ public class CompassListener implements Listener
         ItemStack item = p.getInventory().getItemInMainHand();
         if (e.getHand() == EquipmentSlot.HAND && e.getAction() == Action.RIGHT_CLICK_AIR)
         {
-            if (item.getType() == Material.COMPASS && handlePlayerClickCompass(p, item))
+            if (item.getType() == Material.COMPASS && HandlePlayerClickCompass(p, item))
             {
                 e.setCancelled(true);
             }
-            else if (enableRecoveryCompass && item.getType() == Material.RECOVERY_COMPASS && handlePlayerClickRecoveryCompass(p, item))
+            else if (enableRecoveryCompass && item.getType() == Material.RECOVERY_COMPASS && HandlePlayerClickRecoveryCompass(p))
             {
                 e.setCancelled(true);
             }

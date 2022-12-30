@@ -17,6 +17,7 @@ public class Lodestone extends JavaPlugin {
         config.addDefault("teleportSucceeded", "§9Whoosh!");
         config.addDefault("teleportSucceededNamedLocation", "§9Whoosh! Teleported to §a%location%");
         config.addDefault("enableRecoveryCompass", true);
+        config.addDefault("enableDimensionalTravel", true);
 
         config.options().copyDefaults(true);
         saveConfig();
