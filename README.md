@@ -19,6 +19,8 @@ A Minecraft plugin for Spigot/PaperMC that listens for a right click with a comp
 - How you balance your server so that people actually have any recovery compasses to spend is up to you
 - Recovery compass teleports can be turned off in the config
 
+<img alt="Preview gif" src="https://github.com/percyqaz/LodestoneTeleport/blob/master/demo.gif?raw=true" />
+
 I wrote this for my private server, but it's here for anyone else that may find it useful -  When I googled around (at time of creation) I couldn't find anything.
 
 SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that does something very similar (not made by me!). 
