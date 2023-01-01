@@ -23,6 +23,7 @@ public class CompassListener implements Listener
     long warmupTimeTicks;
     boolean enableRecoveryCompass;
     boolean enableDimensionalTravel;
+    boolean teleportationConsumesCompass;
     Map<String, Long> cooldowns = new HashMap<>();
 
     public CompassListener(Lodestone plugin, FileConfiguration config)
@@ -35,6 +36,7 @@ public class CompassListener implements Listener
 
         enableRecoveryCompass = config.getBoolean("enableRecoveryCompass", true);
         enableDimensionalTravel = config.getBoolean("enableDimensionalTravel", true);
+        teleportationConsumesCompass = config.getBoolean("teleportationConsumesCompass", true);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
@@ -101,7 +103,7 @@ public class CompassListener implements Listener
 
                 Location pos = itemMeta.getLodestone();
                 player.teleport(pos.add(0.5, 1.5, 0.5));
-                item.setAmount(item.getAmount() - 1);
+                if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
 
                 player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
                 player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.5f);
@@ -126,25 +128,25 @@ public class CompassListener implements Listener
         }
 
         ItemStack item = player.getInventory().getItemInMainHand();
-
-        if (item.getType() == Material.RECOVERY_COMPASS) {
-            Location lastDeath = player.getLastDeathLocation();
-
-            String teleportMessage = config.getString("teleportSucceeded");
-            player.sendMessage(teleportMessage);
-            player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
-
-            player.teleport(lastDeath);
-            item.setAmount(item.getAmount() - 1);
-
-            player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
-            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.3f);
+        if (item.getType() != Material.RECOVERY_COMPASS)
+        {
+            player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
+            player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
+            ResetPlayerCooldown(player.getName());
             return;
         }
 
-        player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
-        player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
-        ResetPlayerCooldown(player.getName());
+        Location lastDeath = player.getLastDeathLocation();
+
+        String teleportMessage = config.getString("teleportSucceeded");
+        player.sendMessage(teleportMessage);
+        player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+
+        player.teleport(lastDeath.add(0.5, 0.0, 0.5));
+        if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
+
+        player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.3f);
     }
 
     /// Returns true if a teleport went through and false otherwise

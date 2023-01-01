@@ -1,6 +1,3 @@
-out/artifacts/Lodestone_jar/Lodestone.jar
-out/production/Lodestone/plugin.yml
-out/production/Lodestone/me/Percyqaz/Lodestone/CompassListener.class
-out/production/Lodestone/me/Percyqaz/Lodestone/Lodestone.class
-.idea/
-.vs/
+out
+.vs
+.idea

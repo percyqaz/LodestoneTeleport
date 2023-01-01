@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="Lodestone:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Lodestone_jar</output-path>
-    <root id="archive" name="Lodestone.jar">
-      <element id="module-output" name="Lodestone" />
-    </root>
-  </artifact>
-</component>
