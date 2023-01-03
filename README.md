@@ -5,7 +5,7 @@ A Minecraft plugin for Spigot/PaperMC that listens for a right click with a comp
 **When you right-click with a lodestone compass:**
 - You are teleported **on top** of the lodestone it points to
 - It says "Whoosh!" in the chat
-- The compass is consumed
+- The compass is consumed (NEW: Turning this off is now a config option)
 
 **You must**
 - Right click into air, not on a block
