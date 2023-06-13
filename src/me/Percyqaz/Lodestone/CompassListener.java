@@ -271,11 +271,16 @@ public class CompassListener implements Listener
         Material itemType = item.getType();
         if (enableRecoveryCompass && itemType == Material.RECOVERY_COMPASS)
         {
-            e.setCancelled(true);
             Player player = (Player) e.getWhoClicked();
 
             Location oldLoc = player.getLocation();
             Location lastDeath = player.getLastDeathLocation();
+            if (lastDeath == null)
+            {
+                return;
+            }
+
+            e.setCancelled(true);
 
             if (!CheckPlayerDimension(player, lastDeath))
             {

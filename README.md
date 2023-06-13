@@ -5,25 +5,26 @@ A Minecraft plugin for Spigot/PaperMC that listens for a right click with a comp
 **When you right-click with a lodestone compass:**
 - You are teleported **on top** of the lodestone it points to
 - It says "Whoosh!" in the chat
-- The compass is consumed (NEW: Turning this off is now a config option)
+- The compass is consumed (This can be turned off in the config)
 
 **You must**
 - Right click into air, not on a block
 - Have a valid lodestone compass, pointing to an existing lodestone (in **any dimension**)
 - Ensure that there is nothing directly above the lodestone yourself, **the plugin will not check**
 
-**Other features**
-- Configurable cooldown times (and warmup times where you must stand still)
-- Configurable messages for teleports/reasons why you cannot teleport
-- NEW: You can do the same with a recovery compass. If you have died, it will teleport you to where you last died
-- How you balance your server so that people actually have any recovery compasses to spend is up to you
-- Recovery compass teleports can be turned off in the config
-- NEW: Teleporting between dimensions can be turned off in the config
+**Things you can configure**
+- The messages for teleports/reasons why you cannot teleport, for if your server is not in English
+- How long you must wait (a cooldown) before teleporting again
+- How long you must wait and stand still (a warmup) after clicking the compass before the teleportation takes effect
+- Enable or disable teleports with a recovery compass. If you have died, it will teleport you to where you last died
+- Enable or disable teleporting between dimensions with compasses
+- Enable or disable compasses being consumed when teleporting
+- NEW: Enable or disable teleporting with compasses via the inventory. To do this, Shift + Right click the compass or stack of compasses
 
 <img alt="Preview gif" src="https://github.com/percyqaz/LodestoneTeleport/blob/master/demo.gif?raw=true" />
 
-I wrote this for my private server, but it's here for anyone else that may find it useful -  When I googled around (at time of creation) I couldn't find anything.
+I wrote this for my private server, but it's here and on the Spigot forums for anyone else that may find it useful.
 
 SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that does something very similar (not made by me!). 
 
-You can get the .jar file [here](https://github.com/percyqaz/LodestoneTeleport/releases/) - Versions available for 1.16.2 - 1.19.1+
+You can get the .jar file [here](https://github.com/percyqaz/LodestoneTeleport/releases/) - Versions available for 1.16.2 - 1.20.1+
