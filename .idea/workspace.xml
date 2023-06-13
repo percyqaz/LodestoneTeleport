@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="add ability to use compasses from inventories">
+    <list default="true" id="dadfd0bd-7026-47d8-9092-b5573d007536" name="Default Changelist" comment="update readme and fix bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/me/Percyqaz/Lodestone/CompassListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +96,14 @@
       <option name="project" value="LOCAL" />
       <updated>1686617037348</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="update readme and fix bug">
+      <created>1686618005908</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1686618005908</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -120,6 +125,7 @@
     <MESSAGE value="added recovery compass teleporting (can be turned off)" />
     <MESSAGE value="add option to disable dimensional travel" />
     <MESSAGE value="add ability to use compasses from inventories" />
-    <option name="LAST_COMMIT_MESSAGE" value="add ability to use compasses from inventories" />
+    <MESSAGE value="update readme and fix bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="update readme and fix bug" />
   </component>
 </project>
