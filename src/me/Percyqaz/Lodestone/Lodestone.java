@@ -14,11 +14,13 @@ public class Lodestone extends JavaPlugin {
         config.addDefault("teleportFailedWaitForCooldown", "§4You cannot teleport for another %cooldown% seconds!");
         config.addDefault("teleportFailedMovedBeforeTeleport", "§4Teleport cancelled because you moved!");
         config.addDefault("teleportFailedCompassNotInHand", "§4Teleport cancelled because the compass is no longer in your hand!");
+        config.addDefault("teleportFailedDifferentDimension", "§4You cannot teleport to another dimension!");
         config.addDefault("teleportSucceeded", "§9Whoosh!");
         config.addDefault("teleportSucceededNamedLocation", "§9Whoosh! Teleported to §a%location%");
         config.addDefault("enableRecoveryCompass", true);
         config.addDefault("enableDimensionalTravel", true);
         config.addDefault("teleportationConsumesCompass", true);
+        config.addDefault("allowUsingCompassFromInventory", false);
 
         config.options().copyDefaults(true);
         saveConfig();

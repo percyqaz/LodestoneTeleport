@@ -2,11 +2,14 @@ package me.Percyqaz.Lodestone;
 
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +27,7 @@ public class CompassListener implements Listener
     boolean enableRecoveryCompass;
     boolean enableDimensionalTravel;
     boolean teleportationConsumesCompass;
+    boolean allowUsingCompassFromInventory;
     Map<String, Long> cooldowns = new HashMap<>();
 
     public CompassListener(Lodestone plugin, FileConfiguration config)
@@ -37,6 +41,7 @@ public class CompassListener implements Listener
         enableRecoveryCompass = config.getBoolean("enableRecoveryCompass", true);
         enableDimensionalTravel = config.getBoolean("enableDimensionalTravel", true);
         teleportationConsumesCompass = config.getBoolean("teleportationConsumesCompass", true);
+        allowUsingCompassFromInventory = config.getBoolean("allowUsingCompassFromInventory", false);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
@@ -158,7 +163,11 @@ public class CompassListener implements Listener
         CompassMeta itemMeta = (CompassMeta)item.getItemMeta();
         if (itemMeta.hasLodestone() && itemMeta.isLodestoneTracked())
         {
-            if (!CheckPlayerDimension(player, itemMeta.getLodestone())) return false;
+            if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
+            {
+                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                return false;
+            }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
@@ -190,7 +199,11 @@ public class CompassListener implements Listener
         Location lastDeath = player.getLastDeathLocation();
         if (lastDeath != null)
         {
-            if (!CheckPlayerDimension(player, lastDeath)) return false;
+            if (!CheckPlayerDimension(player, lastDeath))
+            {
+                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                return false;
+            }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
@@ -228,6 +241,112 @@ public class CompassListener implements Listener
             {
                 e.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void InventoryClick(InventoryClickEvent e)
+    {
+        if (!allowUsingCompassFromInventory)
+        {
+            return;
+        }
+
+        if (e.getAction() == InventoryAction.NOTHING)
+        {
+            return;
+        }
+
+        if (!e.isRightClick() || !e.isShiftClick())
+        {
+            return;
+        }
+
+        ItemStack item = e.getCurrentItem();
+        if (item == null)
+        {
+            return;
+        }
+
+        Material itemType = item.getType();
+        if (enableRecoveryCompass && itemType == Material.RECOVERY_COMPASS)
+        {
+            e.setCancelled(true);
+            Player player = (Player) e.getWhoClicked();
+
+            Location oldLoc = player.getLocation();
+            Location lastDeath = player.getLastDeathLocation();
+
+            if (!CheckPlayerDimension(player, lastDeath))
+            {
+                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                return;
+            }
+
+            int cooldown = CheckPlayerCooldown(player.getName());
+            if (cooldown > 0)
+            {
+                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                return;
+            }
+
+            String teleportMessage = config.getString("teleportSucceeded");
+            player.sendMessage(teleportMessage);
+            player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+
+            if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+                    plugin,
+                    () -> {
+                        player.teleport(lastDeath.add(0.5, 0.0, 0.5));
+                        player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.3f);
+                    }
+            );
+        }
+        else if (itemType == Material.COMPASS)
+        {
+            CompassMeta itemMeta = (CompassMeta) item.getItemMeta();
+            if (!itemMeta.hasLodestone() || !itemMeta.isLodestoneTracked())
+            {
+                return;
+            }
+
+            e.setCancelled(true);
+            Player player = (Player) e.getWhoClicked();
+
+            Location oldLoc = player.getLocation();
+
+            if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
+            {
+                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                return;
+            }
+
+            int cooldown = CheckPlayerCooldown(player.getName());
+            if (cooldown > 0)
+            {
+                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                return;
+            }
+
+            String teleportMessage =
+                    itemMeta.hasDisplayName()
+                            ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
+                            : config.getString("teleportSucceeded");
+            player.sendMessage(teleportMessage);
+            player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+
+            if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
+            Location pos = itemMeta.getLodestone();
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+                    plugin,
+                    () -> {
+                        player.teleport(pos.add(0.5, 1.5, 0.5));
+                        player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+                        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.5f);
+                    }
+            );
         }
     }
 }
