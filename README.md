@@ -20,11 +20,10 @@ A Minecraft plugin for Spigot/PaperMC that listens for a right click with a comp
 - Enable or disable teleporting between dimensions with compasses
 - Enable or disable compasses being consumed when teleporting
 - NEW: Enable or disable teleporting with compasses via the inventory. To do this, Shift + Right click the compass or stack of compasses
+- NEW: Enable or disable teleporting with compasses via item frames. To do this, right click on an item frame containing a compass. Does not consume the compass, even if the setting to do so is on.
 
 <img alt="Preview gif" src="https://github.com/percyqaz/LodestoneTeleport/blob/master/demo.gif?raw=true" />
 
 I wrote this for my private server, but it's here and on the Spigot forums for anyone else that may find it useful.
-
-SEE ALSO: A [Data Pack](https://github.com/NicolasBissig/Lodeport) that does something very similar (not made by me!). 
 
 You can get the .jar file [here](https://github.com/percyqaz/LodestoneTeleport/releases/) - Versions available for 1.16.2 - 1.20.1+
