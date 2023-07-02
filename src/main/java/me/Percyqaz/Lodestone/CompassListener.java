@@ -2,14 +2,15 @@ package me.Percyqaz.Lodestone;
 
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +29,7 @@ public class CompassListener implements Listener
     boolean enableDimensionalTravel;
     boolean teleportationConsumesCompass;
     boolean allowUsingCompassFromInventory;
+    boolean allowUsingCompassFromItemFrame;
     Map<String, Long> cooldowns = new HashMap<>();
 
     public CompassListener(Lodestone plugin, FileConfiguration config)
@@ -42,6 +44,7 @@ public class CompassListener implements Listener
         enableDimensionalTravel = config.getBoolean("enableDimensionalTravel", true);
         teleportationConsumesCompass = config.getBoolean("teleportationConsumesCompass", true);
         allowUsingCompassFromInventory = config.getBoolean("allowUsingCompassFromInventory", false);
+        allowUsingCompassFromItemFrame = config.getBoolean("allowUsingCompassFromItemFrame", false);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
@@ -353,5 +356,70 @@ public class CompassListener implements Listener
                     }
             );
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void PlayerInteractEntity(PlayerInteractEntityEvent e)
+    {
+        if (!allowUsingCompassFromItemFrame)
+        {
+            return;
+        }
+
+        Entity clicked = e.getRightClicked();
+        if (clicked.getType() != EntityType.ITEM_FRAME && clicked.getType() != EntityType.GLOW_ITEM_FRAME)
+        {
+            return;
+        }
+
+        ItemFrame itemFrame = (ItemFrame)clicked;
+        ItemStack item = itemFrame.getItem();
+        Material itemType = item.getType();
+
+        if (itemType != Material.COMPASS)
+        {
+            return;
+        }
+
+        CompassMeta itemMeta = (CompassMeta) item.getItemMeta();
+        if (!itemMeta.hasLodestone() || !itemMeta.isLodestoneTracked())
+        {
+            return;
+        }
+
+        e.setCancelled(true);
+        Player player = e.getPlayer();
+
+        Location oldLoc = player.getLocation();
+
+        if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
+        {
+            player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+            return;
+        }
+
+        int cooldown = CheckPlayerCooldown(player.getName());
+        if (cooldown > 0)
+        {
+            player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+            return;
+        }
+
+        String teleportMessage =
+                itemMeta.hasDisplayName()
+                        ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
+                        : config.getString("teleportSucceeded");
+        player.sendMessage(teleportMessage);
+        player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+
+        Location pos = itemMeta.getLodestone();
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+                plugin,
+                () -> {
+                    player.teleport(pos.add(0.5, 1.5, 0.5));
+                    player.spawnParticle(Particle.CLOUD, player.getLocation().add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
+                    player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_ACTIVATE, 1.0f, 0.5f);
+                }
+        );
     }
 }

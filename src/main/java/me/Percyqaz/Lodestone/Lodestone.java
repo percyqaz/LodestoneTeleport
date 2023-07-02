@@ -21,6 +21,7 @@ public class Lodestone extends JavaPlugin {
         config.addDefault("enableDimensionalTravel", true);
         config.addDefault("teleportationConsumesCompass", true);
         config.addDefault("allowUsingCompassFromInventory", false);
+        config.addDefault("allowUsingCompassFromItemFrame", false);
 
         config.options().copyDefaults(true);
         saveConfig();
