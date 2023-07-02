@@ -1,5 +1,5 @@
 name: Lodestone
-version: 2.4
+version: 2.5
 author: Percyqaz
 main: me.Percyqaz.Lodestone.Lodestone
-api-version: 1.19
+api-version: '1.20'
