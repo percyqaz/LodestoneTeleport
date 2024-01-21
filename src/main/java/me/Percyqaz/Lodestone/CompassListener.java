@@ -1,5 +1,7 @@
 package me.Percyqaz.Lodestone;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
@@ -30,6 +32,7 @@ public class CompassListener implements Listener
     boolean teleportationConsumesCompass;
     boolean allowUsingCompassFromInventory;
     boolean allowUsingCompassFromItemFrame;
+    boolean showMessagesInActionBar;
     Map<String, Long> cooldowns = new HashMap<>();
 
     public CompassListener(Lodestone plugin, FileConfiguration config)
@@ -45,9 +48,22 @@ public class CompassListener implements Listener
         teleportationConsumesCompass = config.getBoolean("teleportationConsumesCompass", true);
         allowUsingCompassFromInventory = config.getBoolean("allowUsingCompassFromInventory", false);
         allowUsingCompassFromItemFrame = config.getBoolean("allowUsingCompassFromItemFrame", false);
+        showMessagesInActionBar = config.getBoolean("showMessagesInActionBar", false);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
+    }
+
+    void SendPlayerMessage(Player player, String message)
+    {
+        if (showMessagesInActionBar)
+        {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
+        }
+        else
+        {
+            player.sendMessage(message);
+        }
     }
 
     void ResetPlayerCooldown(String name)
@@ -90,7 +106,7 @@ public class CompassListener implements Listener
         // Check player hasn't moved, is still holding a teleport compass
         if (PlayerHasMoved(oldLoc, player.getLocation()) || player.isDead())
         {
-            player.sendMessage(config.getString("teleportFailedMovedBeforeTeleport"));
+            SendPlayerMessage(player, config.getString("teleportFailedMovedBeforeTeleport"));
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
             ResetPlayerCooldown(player.getName());
             return;
@@ -106,7 +122,7 @@ public class CompassListener implements Listener
                         itemMeta.hasDisplayName()
                                 ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
                                 : config.getString("teleportSucceeded");
-                player.sendMessage(teleportMessage);
+                SendPlayerMessage(player, teleportMessage);
                 player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
                 Location pos = itemMeta.getLodestone();
@@ -119,7 +135,7 @@ public class CompassListener implements Listener
             }
         }
 
-        player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
+        SendPlayerMessage(player, config.getString("teleportFailedCompassNotInHand"));
         player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.5f);
         ResetPlayerCooldown(player.getName());
     }
@@ -129,7 +145,7 @@ public class CompassListener implements Listener
         // Check player hasn't moved, is still holding a recovery compass
         if (PlayerHasMoved(oldLoc, player.getLocation()) || player.isDead())
         {
-            player.sendMessage(config.getString("teleportFailedMovedBeforeTeleport"));
+            SendPlayerMessage(player, config.getString("teleportFailedMovedBeforeTeleport"));
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
             ResetPlayerCooldown(player.getName());
             return;
@@ -138,7 +154,7 @@ public class CompassListener implements Listener
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item.getType() != Material.RECOVERY_COMPASS)
         {
-            player.sendMessage(config.getString("teleportFailedCompassNotInHand"));
+            SendPlayerMessage(player, config.getString("teleportFailedCompassNotInHand"));
             player.playSound(oldLoc, Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 0.3f);
             ResetPlayerCooldown(player.getName());
             return;
@@ -147,7 +163,7 @@ public class CompassListener implements Listener
         Location lastDeath = player.getLastDeathLocation();
 
         String teleportMessage = config.getString("teleportSucceeded");
-        player.sendMessage(teleportMessage);
+        SendPlayerMessage(player, teleportMessage);
         player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
         player.teleport(lastDeath.add(0.5, 0.0, 0.5));
@@ -168,14 +184,14 @@ public class CompassListener implements Listener
         {
             if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
             {
-                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                SendPlayerMessage(player, config.getString("teleportFailedDifferentDimension"));
                 return false;
             }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
-                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                SendPlayerMessage(player, config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
                 return false;
             }
 
@@ -204,14 +220,14 @@ public class CompassListener implements Listener
         {
             if (!CheckPlayerDimension(player, lastDeath))
             {
-                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                SendPlayerMessage(player, config.getString("teleportFailedDifferentDimension"));
                 return false;
             }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
-                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                SendPlayerMessage(player, config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
                 return false;
             }
 
@@ -287,19 +303,19 @@ public class CompassListener implements Listener
 
             if (!CheckPlayerDimension(player, lastDeath))
             {
-                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                SendPlayerMessage(player, config.getString("teleportFailedDifferentDimension"));
                 return;
             }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
-                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                SendPlayerMessage(player, config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
                 return;
             }
 
             String teleportMessage = config.getString("teleportSucceeded");
-            player.sendMessage(teleportMessage);
+            SendPlayerMessage(player, teleportMessage);
             player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
             if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
@@ -327,14 +343,14 @@ public class CompassListener implements Listener
 
             if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
             {
-                player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+                SendPlayerMessage(player, config.getString("teleportFailedDifferentDimension"));
                 return;
             }
 
             int cooldown = CheckPlayerCooldown(player.getName());
             if (cooldown > 0)
             {
-                player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+                SendPlayerMessage(player, config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
                 return;
             }
 
@@ -342,7 +358,7 @@ public class CompassListener implements Listener
                     itemMeta.hasDisplayName()
                             ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
                             : config.getString("teleportSucceeded");
-            player.sendMessage(teleportMessage);
+            SendPlayerMessage(player, teleportMessage);
             player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
             if (teleportationConsumesCompass) item.setAmount(item.getAmount() - 1);
@@ -394,14 +410,14 @@ public class CompassListener implements Listener
 
         if (!CheckPlayerDimension(player, itemMeta.getLodestone()))
         {
-            player.sendMessage(config.getString("teleportFailedDifferentDimension"));
+            SendPlayerMessage(player, config.getString("teleportFailedDifferentDimension"));
             return;
         }
 
         int cooldown = CheckPlayerCooldown(player.getName());
         if (cooldown > 0)
         {
-            player.sendMessage(config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
+            SendPlayerMessage(player, config.getString("teleportFailedWaitForCooldown").replace("%cooldown%", String.valueOf(cooldown)));
             return;
         }
 
@@ -409,7 +425,7 @@ public class CompassListener implements Listener
                 itemMeta.hasDisplayName()
                         ? config.getString("teleportSucceededNamedLocation").replace("%location%", itemMeta.getDisplayName())
                         : config.getString("teleportSucceeded");
-        player.sendMessage(teleportMessage);
+        SendPlayerMessage(player, teleportMessage);
         player.spawnParticle(Particle.CLOUD, oldLoc.add(0.0f, 1.0f, 0.0f), 50, 0.5f, 1.0f, 0.5f, 0.01f);
 
         Location pos = itemMeta.getLodestone();
