@@ -17,12 +17,13 @@ public class Lodestone extends JavaPlugin {
         config.addDefault("teleportFailedDifferentDimension", "§4You cannot teleport to another dimension!");
         config.addDefault("teleportSucceeded", "§9Whoosh!");
         config.addDefault("teleportSucceededNamedLocation", "§9Whoosh! Teleported to §a%location%");
+        config.addDefault("teleportWarmup", "§2Teleporting in %warmup% seconds, please stand still!");
         config.addDefault("enableRecoveryCompass", true);
         config.addDefault("enableDimensionalTravel", true);
         config.addDefault("teleportationConsumesCompass", true);
         config.addDefault("allowUsingCompassFromInventory", false);
         config.addDefault("allowUsingCompassFromItemFrame", false);
-        config.addDefault("showMessagesInActionBar", false);
+        config.addDefault("showMessagesInActionBar", true);
 
         config.options().copyDefaults(true);
         saveConfig();

@@ -47,7 +47,7 @@ public class CompassListener implements Listener
         teleportationConsumesCompass = config.getBoolean("teleportationConsumesCompass", true);
         allowUsingCompassFromInventory = config.getBoolean("allowUsingCompassFromInventory", false);
         allowUsingCompassFromItemFrame = config.getBoolean("allowUsingCompassFromItemFrame", false);
-        showMessagesInActionBar = config.getBoolean("showMessagesInActionBar", false);
+        showMessagesInActionBar = config.getBoolean("showMessagesInActionBar", true);
 
         // Cooldown must always be at least as long as warmup
         cooldownTimeMillis = Math.max(cooldownTimeMillis, warmupTimeTicks * 50L);
@@ -55,6 +55,11 @@ public class CompassListener implements Listener
 
     void SendPlayerMessage(Player player, String message)
     {
+        if (message.isBlank())
+        {
+            return;
+        }
+
         if (showMessagesInActionBar)
         {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(message));
@@ -201,6 +206,10 @@ public class CompassListener implements Listener
                     () -> PerformTeleport(player, oldLoc),
                     warmupTimeTicks
             );
+            if (warmupTimeTicks > 0)
+            {
+                SendPlayerMessage(player, config.getString("teleportWarmup").replace("%warmup%", String.valueOf(warmupTimeTicks / 20L)));
+            }
             player.spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0.0f, 1.0f, 0.0f), 50);
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 1.5f);
             return true;
@@ -237,6 +246,10 @@ public class CompassListener implements Listener
                     () -> PerformRecoveryTeleport(player, oldLoc),
                     warmupTimeTicks
             );
+            if (warmupTimeTicks > 0)
+            {
+                SendPlayerMessage(player, config.getString("teleportWarmup").replace("%warmup%", String.valueOf(warmupTimeTicks / 20L)));
+            }
             player.spawnParticle(Particle.ENCHANTMENT_TABLE, player.getLocation().add(0.0f, 1.0f, 0.0f), 50);
             player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, 1.0f, 1.2f);
             return true;
